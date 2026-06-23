@@ -1,0 +1,104 @@
+# CloudBlog 中间件环境
+# 使用方式：在项目根目录执行 docker compose up -d
+# 全部启动后访问以下地址验证：
+#   Nacos:    http://localhost:8848/nacos (账号: nacos / nacos)
+#   Sentinel: http://localhost:8858       (账号: sentinel / sentinel)
+#   MinIO:    http://localhost:9001       (账号: minioadmin / minioadmin123)
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cloudblog-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-Yx2474136983}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./sql/init:/docker-entrypoint-initdb.d    # 建表脚本自动执行
+    networks:
+      - cloudblog-net
+    command: |
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_PASSWORD:-Yx2474136983}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7
+    container_name: cloudblog-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - cloudblog-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  nacos:
+    image: nacos/nacos-server:v2.2.3
+    container_name: cloudblog-nacos
+    environment:
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: mysql
+      # Nacos 使用 MySQL 存储配置（比默认内嵌数据库更稳）
+      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_DB_NAME: nacos_config
+      MYSQL_SERVICE_USER: root
+      MYSQL_SERVICE_PASSWORD: ${MYSQL_PASSWORD:-Yx2474136983}
+      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      JVM_XMS: 256m
+      JVM_XMX: 512m
+    ports:
+      - "8848:8848"
+      - "9848:9848"       # Nacos 2.x gRPC 端口
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - cloudblog-net
+
+  sentinel:
+    image: bladex/sentinel-dashboard:1.8.6
+    container_name: cloudblog-sentinel
+    environment:
+      # 容器内端口 8080 -> 映射到宿主机 8858（避免和 Gateway 冲突）
+      JAVA_OPTS: -Dserver.port=8080
+    ports:
+      - "8858:8080"
+    networks:
+      - cloudblog-net
+
+  minio:
+    image: minio/minio
+    container_name: cloudblog-minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    ports:
+      - "9000:9000"     # API 端口（Spring Boot 连接用）
+      - "9001:9001"     # 管理控制台
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - cloudblog-net
+
+networks:
+  cloudblog-net:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
+  minio-data:

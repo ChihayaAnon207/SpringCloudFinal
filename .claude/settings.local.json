@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mysql --version)",
+      "Bash(redis-cli --version)",
+      "Bash(java *)",
+      "Bash(mvn -version)",
+      "Bash(docker --version)",
+      "Bash(docker info *)",
+      "Bash(wmic OS get TotalVisibleMemorySize,FreePhysicalMemory)",
+      "Bash(wmic LogicalDisk get Size,FreeSpace)",
+      "Bash(cmd.exe /c \"where docker\")",
+      "Bash(choco list *)",
+      "Bash(winget list *)",
+      "Bash(npm -v)",
+      "Bash(cmd.exe /c \"where mysql\")",
+      "Bash(mysqld --version)",
+      "Bash(docker compose *)",
+      "Bash(docker exec cloudblog-mysql *)",
+      "Bash(docker restart cloudblog-nacos *)",
+      "Bash(docker exec cloudblog-nacos *)",
+      "Bash(docker exec *)",
+      "Bash(mvn compile *)"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+spring:
+  cloud:
+    gateway:
+      # 路由配置
+      routes:
+        # 用户服务
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/**
+        # 博客服务
+        - id: blog-service
+          uri: lb://blog-service
+          predicates:
+            - Path=/api/blog/**
+        # 评论服务
+        - id: comment-service
+          uri: lb://comment-service
+          predicates:
+            - Path=/api/comment/**
+        # 文件服务
+        - id: file-service
+          uri: lb://file-service
+          predicates:
+            - Path=/api/file/**
+
+      # 全局过滤器配置
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin
+
+  # Gateway 不需要 web 容器（reactive）
+  main:
+    web-application-type: reactive
+
+# JWT 配置
+jwt:
+  secret: ${JWT_SECRET:CloudBlogSecretKey2024ForJWTTokenGeneration}
+  expiration: 86400000  # 24小时（毫秒）
+  # 白名单：无需 Token 即可访问
+  white-list:
+    - /api/user/login
+    - /api/user/register
+    - /api/blog/page
+    - /api/blog/\d+
+    - /api/comment/blog/\d+
+    - /api/file/download/**
