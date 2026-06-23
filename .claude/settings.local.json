@@ -36,7 +36,22 @@
       "Bash(taskkill /F /PID 39324)",
       "Bash(awk \"{print \\\\$5}\")",
       "Bash(powershell *)",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(mvn exec:java -pl common -Dexec.mainClass=\"dummy\")",
+      "Bash(mvn spring-boot:run -q)",
+      "Bash(mvn spring-boot:run -pl blog-service -q)",
+      "Bash(mvn spring-boot:run -pl comment-service -q)",
+      "Bash(mvn spring-boot:run -pl file-service -q)",
+      "Bash(mvn spring-boot:run -pl cloud-gateway -q)",
+      "Bash(kill -f \"java\")",
+      "Bash(taskkill //F //PID 35020 //PID 11696 //PID 16168)",
+      "Bash(wmic process *)",
+      "Bash(taskkill //F //PID 35020)",
+      "Bash(taskkill //F //PID 11696)",
+      "Bash(taskkill //F //PID 16168)",
+      "Bash(python3 -m json.tool)",
+      "Bash(Select-String \"LISTENING\")",
+      "Bash(Select-String \"808[0-4]\")"
     ]
   }
 }

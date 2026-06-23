@@ -37,10 +37,4 @@ jwt:
   secret: ${JWT_SECRET:CloudBlogSecretKey2024ForJWTTokenGeneration}
   expiration: 86400000  # 24小时（毫秒）
   # 白名单：无需 Token 即可访问
-  white-list:
-    - /api/user/login
-    - /api/user/register
-    - /api/blog/page
-    - /api/blog/\d+
-    - /api/comment/blog/\d+
-    - /api/file/download/**
+  white-list: /api/user/login,/api/user/register,/api/blog/page,/api/blog/\d+,/api/comment/blog/\d+,/api/file/download/.*,/api/user/\d+
