@@ -20,7 +20,23 @@
       "Bash(docker restart cloudblog-nacos *)",
       "Bash(docker exec cloudblog-nacos *)",
       "Bash(docker exec *)",
-      "Bash(mvn compile *)"
+      "Bash(mvn compile *)",
+      "Bash(curl --version)",
+      "Bash(mvn spring-boot:run -pl user-service -am)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(mvn install *)",
+      "Bash(mvn spring-boot:run -pl user-service)",
+      "Bash(echo \"PID=$!\")",
+      "Bash(mvn spring-boot:run -pl user-service -q)",
+      "Bash(mvn spring-boot:run)",
+      "Bash(netstat -ano)",
+      "Bash(kill -9 30808 39324 13752)",
+      "Bash(tasklist //FI \"PID eq 30808\" //FI \"PID eq 39324\")",
+      "Bash(taskkill /F /PID 30808)",
+      "Bash(taskkill /F /PID 39324)",
+      "Bash(awk \"{print \\\\$5}\")",
+      "Bash(powershell *)",
+      "Bash(curl *)"
     ]
   }
 }
