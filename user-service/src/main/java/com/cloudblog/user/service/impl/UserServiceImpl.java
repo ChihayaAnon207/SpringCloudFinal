@@ -93,6 +93,9 @@ public class UserServiceImpl implements UserService {
         if (StrUtil.isNotBlank(request.getEmail())) {
             user.setEmail(request.getEmail());
         }
+        if (StrUtil.isNotBlank(request.getAvatarUrl())) {
+            user.setAvatarUrl(request.getAvatarUrl());
+        }
 
         userMapper.updateById(user);
         return toVO(user);

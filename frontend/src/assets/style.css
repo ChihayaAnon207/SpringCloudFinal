@@ -91,6 +91,7 @@ body {
   align-items: center;
   gap: 4px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .blog-meta .meta-item:hover {
@@ -193,12 +194,17 @@ body {
 
 /* Comments */
 .comment-item {
-  padding: 12px 0;
+  padding: 16px 0;
   border-bottom: 1px solid #f0f0f0;
 }
 
 .comment-item:last-child {
   border-bottom: none;
+  padding-bottom: 4px;
+}
+
+.reply-item {
+  padding: 12px 0 4px 36px;
 }
 
 .comment-header {

@@ -81,7 +81,19 @@
       "Bash(npm install *)",
       "Bash(npm run *)",
       "Bash(pkill -f \"vite\")",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "Bash(mvn spring-boot:run -pl blog-service -am)",
+      "Bash(mvn spring-boot:run -pl comment-service -am)",
+      "Bash(mvn spring-boot:run -pl file-service -am)",
+      "Bash(mvn spring-boot:run *)",
+      "Bash(awk '{print $2}')",
+      "Bash(awk '{print $5}')",
+      "Bash(taskkill //F //PID 23712)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'total: {d[\\\\\"data\\\\\"][\\\\\"total\\\\\"]}, records: {len\\(d[\\\\\"data\\\\\"][\\\\\"records\\\\\"]\\)}'\\)\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'total: {d[\\\\\"data\\\\\"][\\\\\"total\\\\\"]}, records: {len\\(d[\\\\\"data\\\\\"][\\\\\"records\\\\\"]\\)}'\\)\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'without userId - total: {d[\\\\\"data\\\\\"][\\\\\"total\\\\\"]}'\\)\")",
+      "Bash(awk '{print $NF}')",
+      "Bash(taskkill //F //PID 27004)"
     ]
   }
 }

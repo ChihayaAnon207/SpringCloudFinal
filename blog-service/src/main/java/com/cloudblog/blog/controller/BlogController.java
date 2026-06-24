@@ -35,11 +35,12 @@ public class BlogController {
     @GetMapping("/page")
     public Result<Page<BlogVO>> page(@RequestParam(defaultValue = "1") Integer page,
                                       @RequestParam(required = false) Integer size,
-                                      @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+                                      @RequestParam(required = false) Long userId,
+                                      @RequestHeader(value = "X-User-Id", required = false) Long currentUserId) {
         if (size == null) {
             size = blogConfig.getDefaultPageSize();
         }
-        return Result.success(blogService.pageBlogs(page, size, userId));
+        return Result.success(blogService.pageBlogs(page, size, userId, currentUserId));
     }
 
     @PutMapping("/{id}")

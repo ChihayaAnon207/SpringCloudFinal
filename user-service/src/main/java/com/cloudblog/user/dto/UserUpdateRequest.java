@@ -7,4 +7,5 @@ public class UserUpdateRequest {
     private String nickname;
     private String signature;
     private String email;
+    private String avatarUrl;
 }

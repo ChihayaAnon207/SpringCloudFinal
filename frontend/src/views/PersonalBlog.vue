@@ -39,12 +39,12 @@
       <div class="blog-summary">{{ blog.summary || blog.content?.slice(0, 120) }}</div>
       <div class="blog-meta">
         <span class="meta-item" @click="goDetail(blog.id)">
-          <ChatLineSquare /> {{ blog.commentCount || 0 }}
+          <ChatLineSquare /> {{ blog.commentCount || 0 }} 评论
         </span>
         <span class="meta-item" @click="toggleLike(blog)">
           <template v-if="blog.liked"><ThumbsUpFilled style="color:#4a90d9;" /></template>
           <template v-else><ThumbsUp /></template>
-          {{ blog.likeCount || 0 }}
+          {{ blog.likeCount || 0 }} 点赞
         </span>
         <span style="margin-left:auto;display:flex;gap:8px;">
           <el-button text size="small" type="primary" @click="editBlog(blog)">编辑</el-button>
@@ -70,16 +70,28 @@
     </div>
 
     <!-- Edit Profile Dialog -->
-    <el-dialog v-model="showEditProfile" title="编辑资料" width="400px">
+    <el-dialog v-model="showEditProfile" title="编辑资料" width="450px">
       <el-form :model="profileForm" label-position="top">
+        <el-form-item label="头像">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <img :src="profileForm.avatarUrl || defaultAvatar" style="width:60px;height:60px;border-radius:50%;object-fit:cover;" />
+            <div>
+              <el-upload
+                :show-file-list="false"
+                :http-request="handleAvatarUpload"
+                accept="image/*"
+              >
+                <el-button type="primary" plain size="small">选择图片上传</el-button>
+              </el-upload>
+              <div style="font-size:12px;color:#8c8c8c;margin-top:4px;">支持 JPG/PNG，建议 200x200</div>
+            </div>
+          </div>
+        </el-form-item>
         <el-form-item label="昵称">
           <el-input v-model="profileForm.nickname" />
         </el-form-item>
         <el-form-item label="个人简介">
           <el-input v-model="profileForm.signature" type="textarea" :rows="3" />
-        </el-form-item>
-        <el-form-item label="头像URL">
-          <el-input v-model="profileForm.avatarUrl" placeholder="输入图片链接或上传" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -106,6 +118,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Edit } from '@element-plus/icons-vue'
 import { getUserBlogs, createBlog, updateBlog, deleteBlog, likeBlog } from '@/api/blog'
+import { uploadFile } from '@/api/file'
 import { updateProfile } from '@/api/user'
 import { useUserStore } from '@/store/user'
 import NavBar from '@/components/NavBar.vue'
@@ -163,6 +176,17 @@ async function handlePublish() {
     await loadBlogs()
   } finally {
     publishing.value = false
+  }
+}
+
+async function handleAvatarUpload(uploadOptions) {
+  const formData = new FormData()
+  formData.append('file', uploadOptions.file)
+  try {
+    const res = await uploadFile(formData)
+    profileForm.avatarUrl = res.data.url
+  } catch (_) {
+    ElMessage.error('头像上传失败')
   }
 }
 

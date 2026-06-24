@@ -66,11 +66,12 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Page<BlogVO> pageBlogs(Integer page, Integer size, Long currentUserId) {
+    public Page<BlogVO> pageBlogs(Integer page, Integer size, Long userId, Long currentUserId) {
         Page<Blog> blogPage = blogMapper.selectPage(
                 new Page<>(page, size),
                 new LambdaQueryWrapper<Blog>()
                         .eq(Blog::getStatus, 1)
+                        .eq(userId != null, Blog::getUserId, userId)
                         .orderByDesc(Blog::getCreatedAt)
         );
 

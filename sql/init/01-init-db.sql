@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     `username`    VARCHAR(50)  NOT NULL COMMENT '用户名',
     `password`    VARCHAR(255) NOT NULL COMMENT '加密密码',
     `nickname`    VARCHAR(50)  DEFAULT NULL COMMENT '昵称',
-    `avatar_url`  VARCHAR(255) DEFAULT NULL COMMENT '头像URL',
+    `avatar_url`  TEXT DEFAULT NULL COMMENT '头像URL',
     `signature`   VARCHAR(200) DEFAULT NULL COMMENT '个性签名',
     `email`       VARCHAR(100) DEFAULT NULL COMMENT '邮箱',
     `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

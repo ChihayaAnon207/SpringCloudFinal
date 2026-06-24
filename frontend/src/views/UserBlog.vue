@@ -14,12 +14,12 @@
         <div class="blog-summary">{{ blog.summary || blog.content?.slice(0, 120) }}</div>
         <div class="blog-meta">
           <span class="meta-item" @click="goDetail(blog.id)">
-            <ChatLineSquare /> {{ blog.commentCount || 0 }}
+            <ChatLineSquare /> {{ blog.commentCount || 0 }} 评论
           </span>
           <span class="meta-item" @click="toggleLike(blog)">
             <template v-if="blog.liked"><ThumbsUpFilled style="color:#4a90d9;" /></template>
             <template v-else><ThumbsUp /></template>
-            {{ blog.likeCount || 0 }}
+            {{ blog.likeCount || 0 }} 点赞
           </span>
           <span style="margin-left:auto;color:#bfbfbf;">{{ formatTime(blog.createdAt) }}</span>
         </div>
