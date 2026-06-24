@@ -98,7 +98,14 @@
       "Bash(mvn *)",
       "Bash(taskkill //F //IM node.exe)",
       "Bash(taskkill //F //IM java.exe)",
-      "Bash(netsh advfirewall *)"
+      "Bash(netsh advfirewall *)",
+      "Bash(jar tf *)",
+      "Bash(jar xf *)",
+      "Read(//etc/docker/**)",
+      "Bash(docker pull *)",
+      "Bash(DOCKER_OPTS=\"\" docker pull eclipse-temurin:17-jre)",
+      "Bash(nslookup docker.mirrors.ustc.edu.cn)",
+      "Bash(nslookup docker.1ms.run)"
     ]
   }
 }

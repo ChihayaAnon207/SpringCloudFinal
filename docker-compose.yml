@@ -86,11 +86,127 @@ services:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
     ports:
-      - "9000:9000"     # API 端口（Spring Boot 连接用）
-      - "9001:9001"     # 管理控制台
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - minio-data:/data
     command: server /data --console-address ":9001"
+    networks:
+      - cloudblog-net
+
+  # ============================================================
+  # 微服务
+  # ============================================================
+  user-service:
+    build:
+      context: ./user-service
+    container_name: cloudblog-user
+    environment:
+      DB_PASSWORD: ${MYSQL_PASSWORD:-Yx2474136983}
+      JWT_SECRET: ${JWT_SECRET:-CloudBlogSecretKey2024ForJWTTokenGeneration}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/springcloud_db?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      SPRING_REDIS_HOST: redis
+      SPRING_CLOUD_NACOS_DISCOVERY_SERVER-ADDR: nacos:8848
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      nacos:
+        condition: service_started
+    networks:
+      - cloudblog-net
+
+  blog-service:
+    build:
+      context: ./blog-service
+    container_name: cloudblog-blog
+    environment:
+      DB_PASSWORD: ${MYSQL_PASSWORD:-Yx2474136983}
+      JWT_SECRET: ${JWT_SECRET:-CloudBlogSecretKey2024ForJWTTokenGeneration}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/springcloud_db?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      SPRING_REDIS_HOST: redis
+      SPRING_CLOUD_NACOS_DISCOVERY_SERVER-ADDR: nacos:8848
+      SPRING_CLOUD_NACOS_CONFIG_SERVER-ADDR: nacos:8848
+      SPRING_CLOUD_NACOS_CONFIG_ENABLED: "false"
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      nacos:
+        condition: service_started
+    networks:
+      - cloudblog-net
+
+  comment-service:
+    build:
+      context: ./comment-service
+    container_name: cloudblog-comment
+    environment:
+      DB_PASSWORD: ${MYSQL_PASSWORD:-Yx2474136983}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/springcloud_db?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      SPRING_CLOUD_NACOS_DISCOVERY_SERVER-ADDR: nacos:8848
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      nacos:
+        condition: service_started
+    networks:
+      - cloudblog-net
+
+  file-service:
+    build:
+      context: ./file-service
+    container_name: cloudblog-file
+    environment:
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+      SPRING_CLOUD_NACOS_DISCOVERY_SERVER-ADDR: nacos:8848
+    ports:
+      - "8084:8084"
+    depends_on:
+      nacos:
+        condition: service_started
+      minio:
+        condition: service_started
+    networks:
+      - cloudblog-net
+
+  cloud-gateway:
+    build:
+      context: ./cloud-gateway
+    container_name: cloudblog-gateway
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-CloudBlogSecretKey2024ForJWTTokenGeneration}
+      SPRING_CLOUD_NACOS_DISCOVERY_SERVER-ADDR: nacos:8848
+    ports:
+      - "8080:8080"
+    depends_on:
+      nacos:
+        condition: service_started
+      user-service:
+        condition: service_started
+      blog-service:
+        condition: service_started
+      comment-service:
+        condition: service_started
+      file-service:
+        condition: service_started
+    networks:
+      - cloudblog-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: cloudblog-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - cloud-gateway
     networks:
       - cloudblog-net
 
