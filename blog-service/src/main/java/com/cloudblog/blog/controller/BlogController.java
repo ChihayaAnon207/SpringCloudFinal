@@ -1,5 +1,6 @@
 package com.cloudblog.blog.controller;
 
+import com.cloudblog.blog.config.BlogConfig;
 import com.cloudblog.blog.dto.BlogCreateRequest;
 import com.cloudblog.blog.dto.BlogUpdateRequest;
 import com.cloudblog.blog.service.BlogService;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class BlogController {
 
     private final BlogService blogService;
+    private final BlogConfig blogConfig;
 
     @PostMapping
     public Result<BlogVO> create(@RequestBody BlogCreateRequest request,
@@ -32,8 +34,11 @@ public class BlogController {
 
     @GetMapping("/page")
     public Result<Page<BlogVO>> page(@RequestParam(defaultValue = "1") Integer page,
-                                      @RequestParam(defaultValue = "10") Integer size,
+                                      @RequestParam(required = false) Integer size,
                                       @RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        if (size == null) {
+            size = blogConfig.getDefaultPageSize();
+        }
         return Result.success(blogService.pageBlogs(page, size, userId));
     }
 

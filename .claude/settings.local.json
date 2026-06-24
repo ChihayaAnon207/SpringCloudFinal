@@ -65,7 +65,10 @@
       "Bash(taskkill //F //PID 9016)",
       "Bash(python -m json.tool)",
       "Bash(taskkill //F //PID 17704)",
-      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'authorNickname: {d[\\\\\"data\\\\\"][\\\\\"authorNickname\\\\\"]}'\\)\")"
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'authorNickname: {d[\\\\\"data\\\\\"][\\\\\"authorNickname\\\\\"]}'\\)\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'Total configs: {d.get\\(\\\\\"totalCount\\\\\",0\\)}'\\); [print\\(f' - {c[\\\\\"dataId\\\\\"]} \\({c[\\\\\"group\\\\\"]}\\)'\\) for c in d.get\\('pageItems',[]\\)]\")",
+      "Bash(python -c ' *)",
+      "Bash(taskkill //F //PID 17588)"
     ]
   }
 }
