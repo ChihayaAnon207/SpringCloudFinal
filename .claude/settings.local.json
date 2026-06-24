@@ -68,7 +68,16 @@
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'authorNickname: {d[\\\\\"data\\\\\"][\\\\\"authorNickname\\\\\"]}'\\)\")",
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'Total configs: {d.get\\(\\\\\"totalCount\\\\\",0\\)}'\\); [print\\(f' - {c[\\\\\"dataId\\\\\"]} \\({c[\\\\\"group\\\\\"]}\\)'\\) for c in d.get\\('pageItems',[]\\)]\")",
       "Bash(python -c ' *)",
-      "Bash(taskkill //F //PID 17588)"
+      "Bash(taskkill //F //PID 17588)",
+      "Read(//c/Program Files/**)",
+      "Bash(jmeter -v)",
+      "Bash(pkill -f \"spring-boot:run\")",
+      "Bash(echo \"gateway PID=$!\")",
+      "Bash(jmeter -n -t jmeter/CloudBlog_Stress_Test.jmx -l logs/jmeter-results.jtl -e -o jmeter/report -j logs/jmeter.log)",
+      "Bash(sed -n '95,120p' \"/d/apache-jmeter-5.5/bin/templates/build-adv-web-test-plan.jmx\")",
+      "Bash(sed -n '140,160p' \"/d/apache-jmeter-5.5/bin/templates/build-adv-web-test-plan.jmx\")",
+      "Bash(jmeter -g logs/jmeter-results.jtl -o jmeter/report -j logs/jmeter-report.log)",
+      "Bash(python3 -c ' *)"
     ]
   }
 }
