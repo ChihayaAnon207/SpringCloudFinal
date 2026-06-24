@@ -77,7 +77,11 @@
       "Bash(sed -n '95,120p' \"/d/apache-jmeter-5.5/bin/templates/build-adv-web-test-plan.jmx\")",
       "Bash(sed -n '140,160p' \"/d/apache-jmeter-5.5/bin/templates/build-adv-web-test-plan.jmx\")",
       "Bash(jmeter -g logs/jmeter-results.jtl -o jmeter/report -j logs/jmeter-report.log)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(npx vite *)"
     ]
   }
 }
