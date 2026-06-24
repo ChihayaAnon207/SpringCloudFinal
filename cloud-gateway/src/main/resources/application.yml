@@ -38,3 +38,14 @@ jwt:
   expiration: 86400000  # 24小时（毫秒）
   # 白名单：无需 Token 即可访问
   white-list: /api/user/login,/api/user/register,/api/blog/page,/api/blog/\d+,/api/comment/blog/\d+,/api/file/download/.*,/api/user/\d+
+
+# Sentinel 配置
+sentinel:
+  transport:
+    dashboard: localhost:8858
+    port: 8718
+  scg:
+    fallback:
+      mode: response
+      response-status: 503
+      response-body: '{"code": 503, "msg": "服务繁忙，请稍后重试", "data": null}'

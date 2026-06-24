@@ -10,3 +10,9 @@ minio:
   access-key: ${MINIO_ACCESS_KEY:minioadmin}
   secret-key: ${MINIO_SECRET_KEY:minioadmin123}
   bucket-name: cloudblog
+
+# Sentinel 配置
+sentinel:
+  transport:
+    dashboard: localhost:8858
+    port: 8722

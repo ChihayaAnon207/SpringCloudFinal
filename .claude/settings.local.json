@@ -51,7 +51,21 @@
       "Bash(taskkill //F //PID 16168)",
       "Bash(python3 -m json.tool)",
       "Bash(Select-String \"LISTENING\")",
-      "Bash(Select-String \"808[0-4]\")"
+      "Bash(Select-String \"808[0-4]\")",
+      "Bash(start gateway *)",
+      "Bash(mvn spring-boot:run -pl cloud-gateway)",
+      "Bash(pkill -f \"cloud-gateway\")",
+      "Bash(echo \"user-service PID=$!\")",
+      "Bash(echo \"blog-service PID=$!\")",
+      "Bash(echo \"comment-service PID=$!\")",
+      "Bash(echo \"file-service PID=$!\")",
+      "Bash(echo \"cloud-gateway PID=$!\")",
+      "Bash(kill -9 9016)",
+      "Bash(taskkill /F /PID 9016)",
+      "Bash(taskkill //F //PID 9016)",
+      "Bash(python -m json.tool)",
+      "Bash(taskkill //F //PID 17704)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'authorNickname: {d[\\\\\"data\\\\\"][\\\\\"authorNickname\\\\\"]}'\\)\")"
     ]
   }
 }

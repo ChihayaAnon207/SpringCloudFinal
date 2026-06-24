@@ -17,3 +17,13 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+
+# Sentinel 配置
+feign:
+  sentinel:
+    enabled: true
+
+sentinel:
+  transport:
+    dashboard: localhost:8858
+    port: 8719
