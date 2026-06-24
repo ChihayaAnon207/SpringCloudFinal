@@ -6,7 +6,7 @@
       <div class="blog-card profile-section">
         <img :src="userInfo.avatarUrl || defaultAvatar" class="profile-avatar" />
         <div class="profile-name">{{ userInfo.nickname || '未设置昵称' }}</div>
-        <div class="profile-bio">{{ userInfo.signature || '这个人很懒，什么都没写...' }}</div>
+        <div class="profile-bio">{{ userInfo.signature || '暂无简介' }}</div>
       </div>
 
       <div v-for="blog in blogs" :key="blog.id" class="blog-card">

@@ -3,7 +3,7 @@
     <div class="login-card">
       <div class="login-header">
         <h1 class="login-logo">CloudBlog</h1>
-        <p class="login-desc">简洁 · 清爽 · 个人博客</p>
+        <p class="login-desc">博客系统</p>
       </div>
 
       <div class="login-tabs">
