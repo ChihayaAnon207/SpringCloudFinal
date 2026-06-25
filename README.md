@@ -141,27 +141,45 @@ Sentinel 在 Gateway 层和服务层都配置了流控规则。当某个接口 Q
 # 1. 启动中间件（MySQL/Redis/Nacos/Sentinel/MinIO）
 docker compose up -d
 
-# 2. 编译项目
+# 2. ⚠️ 导入 Nacos 配置（重要！Nacos 启动后必须先导入配置，否则 blog-service 启动报错）
+#    方式一：使用导入脚本（推荐，需 curl）
+bash nacos-config/import-config.sh
+
+#    方式二：手动创建（无需 curl，浏览器操作）
+#    打开 http://localhost:8848/nacos → 配置管理 → 配置列表
+#    点击"+"号新建配置：
+#      Data ID: blog-service.yaml
+#      分组: DEFAULT_GROUP
+#      配置格式: YAML
+#      配置内容: 复制 nacos-config/blog-service.yaml 的完整内容
+
+# 3. 编译项目
 mvn install -DskipTests
 
-# 3. 启动微服务（按顺序，各开一个终端）
+# 4. 启动微服务（按顺序，各开一个终端）
 mvn spring-boot:run -pl user-service       # 8081
-mvn spring-boot:run -pl blog-service       # 8082
+mvn spring-boot:run -pl blog-service       # 8082（需先完成第 2 步）
 mvn spring-boot:run -pl comment-service    # 8083
 mvn spring-boot:run -pl file-service       # 8084
 mvn spring-boot:run -pl cloud-gateway      # 8080（最后启动）
 
-# 4. 启动前端
+# 5. 启动前端
 cd frontend && npm install && npm run dev  # 3000
 
-# 5. 访问 http://localhost:3000
+# 6. 访问 http://localhost:3000
 ```
+
+> **首次运行必须完成第 2 步**。Nacos 是全新实例，不导入 `blog-service.yaml` 会导致 blog-service 启动失败。  
+> 配置导入成功后，所有功能可用，包括 Nacos Config 配置中心热更新。以后重新启动无需再次导入。
 
 ### 一键启动
 
 ```bash
+# 自动完成编译 → Docker → 导入 Nacos 配置 → 启动微服务 → 启动前端
 bash start-all.sh
 ```
+
+> 一键启动脚本会自动执行 `import-config.sh` 导入 Nacos 配置。如果导入失败（如未安装 curl），会提示手动导入，脚本继续执行。此时 blog-service 会因找不到配置而启动失败，需完成手动导入后单独重启。
 
 ### Docker 部署
 

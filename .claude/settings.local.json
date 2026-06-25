@@ -105,7 +105,9 @@
       "Bash(docker pull *)",
       "Bash(DOCKER_OPTS=\"\" docker pull eclipse-temurin:17-jre)",
       "Bash(nslookup docker.mirrors.ustc.edu.cn)",
-      "Bash(nslookup docker.1ms.run)"
+      "Bash(nslookup docker.1ms.run)",
+      "Bash(jps -l)",
+      "Bash(taskkill *)"
     ]
   }
 }

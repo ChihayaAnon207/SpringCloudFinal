@@ -15,9 +15,30 @@ echo "=== 2. 启动 Docker 中间件 ==="
 cd "$ROOT_DIR"
 docker compose up -d mysql redis nacos minio sentinel
 
+echo "等待 Nacos 就绪..."
+# Nacos 启动可能需要较长时间（依赖 MySQL 初始化），最多等 60 秒
+for i in $(seq 1 12); do
+  if curl -s "http://localhost:8848/nacos/v1/auth/login" -d "username=nacos&password=nacos" > /dev/null 2>&1; then
+    echo "  ✓ Nacos 已就绪"
+    break
+  fi
+  if [ $i -eq 12 ]; then
+    echo "  ✗ Nacos 未能及时就绪，后续导入将失败"
+  fi
+  sleep 5
+done
+
 echo ""
-echo "=== 3. 等待中间件就绪（30秒）==="
-sleep 30
+echo "=== 3. 导入 Nacos 配置 ==="
+echo "  → 导入 blog-service.yaml ..."
+if bash "$ROOT_DIR/nacos-config/import-config.sh"; then
+  echo "  ✓ Nacos 配置导入成功"
+else
+  echo "  ✗ Nacos 配置导入失败！blog-service 将无法启动"
+  echo "    请手动导入：打开 http://localhost:8848/nacos → 配置管理 → 配置列表"
+  echo "    新建 Data ID: blog-service.yaml, 内容见 nacos-config/blog-service.yaml"
+  echo "    完成后重新启动本脚本，或单独重启 blog-service"
+fi
 
 echo ""
 echo "=== 4. 启动微服务（后台运行）==="
